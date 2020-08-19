@@ -1,0 +1,12 @@
+acceptLicenseAgreement: 'yes'
+neo4jPassword: passw0rd
+core:
+  standalone: false
+  numberOfServers: 3
+  persistentVolume:
+    storageClass: managed-nfs-storage
+readReplica:
+  numberOfServers: 2
+  persistentVolume:
+    storageClass: managed-nfs-storage  
+plugins: '["apoc","graph-data-science"]'
