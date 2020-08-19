@@ -12,3 +12,9 @@ data:
   {{- else }}
   NEO4J_dbms_mode: CORE
   {{- end }}
+  {{- if .Values.core.ssl }}
+  NEO4J_dbms_ssl_policy_cluster_enabled: true
+  NEO4J_dbms_ssl_policy_cluster_tls__versions: TLSv1.2
+  NEO4J_dbms_ssl_policy_cluster_ciphers: TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+  NEO4J_dbms_ssl_policy_cluster_client__auth: REQUIRE
+  {{- end }}

@@ -65,6 +65,7 @@ defaultDatabase: "neo4j"
 core:
   # configMap: "my-custom-configmap"
   standalone: false
+  ssl: false
   numberOfServers: 3
   persistentVolume:
     ## whether or not persistence is enabled
