@@ -2,7 +2,13 @@ acceptLicenseAgreement: 'yes'
 neo4jPassword: passw0rd
 core:
   standalone: false
-  numberOfServers: 3
+  numberOfServers: 5
+  additionalVolumes:
+    - name: ssl
+      emptyDir: {}
+  additionalVolumeMounts:
+    - name: ssl
+      mountPath: /ssl
   persistentVolume:
     storageClass: managed-nfs-storage
   initContainers:
@@ -18,8 +24,20 @@ core:
       - |
         curl -L https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.2/apoc-4.1.0.2-all.jar -O
         cp apoc-4.1.0.2-all.jar /plugins/
+  - name: init-ssl
+    image: "appropriate/curl:latest"
+    imagePullPolicy: "IfNotPresent"
+    volumeMounts:
+    - name: ssl
+      mountPath: /ssl
+    command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        curl -L http://10.176.19.231/datasets/hyperlink_small/sample_1M/index_0_9_1M  -O
+        cp index_0_9_1M /ssl/
 readReplica:
   numberOfServers: 2
   persistentVolume:
     storageClass: managed-nfs-storage  
-plugins: '["apoc","graph-data-science"]'
+#plugins: '["apoc","graph-data-science"]'
