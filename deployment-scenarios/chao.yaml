@@ -12,18 +12,6 @@ core:
   persistentVolume:
     storageClass: managed-nfs-storage
   initContainers:
-  - name: init-plugins
-    image: "appropriate/curl:latest"
-    imagePullPolicy: "IfNotPresent"
-    volumeMounts:
-    - name: plugins
-      mountPath: /plugins
-    command:
-      - "/bin/sh"
-      - "-c"
-      - |
-        curl -L https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.2/apoc-4.1.0.2-all.jar -O
-        cp apoc-4.1.0.2-all.jar /plugins/
   - name: init-ssl
     image: "appropriate/curl:latest"
     imagePullPolicy: "IfNotPresent"
@@ -34,8 +22,23 @@ core:
       - "/bin/sh"
       - "-c"
       - |
-        curl -L http://10.176.19.231/datasets/hyperlink_small/sample_1M/index_0_9_1M  -O
-        cp index_0_9_1M /ssl/
+        curl -L http://10.176.19.231/datasets/certificates.tar.gz -O
+        cp certificates.tar.gz /ssl/
+        cd /ssl/
+        tar -zxvf certificates.tar.gz
+  initContainers:
+  - name: init-keymaker
+    image: "appropriate/curl:latest"
+    imagePullPolicy: "IfNotPresent"
+    volumeMounts:
+    - name: ssl
+      mountPath: /ssl
+    command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        curl -k "https://keymakerapi-vip.qa.paypal.com/kmsapi/v1/keyobject/all" -H "X-KM-APP-CONTEXT:eyJ4NXQjUzI1NiI6Im94T0ZQU1RtVHRXcFdOYWlRb1U5Tmltc25VWjM4dXRpcUJHbFUzN3VKalEiLCJ4NXQiOiI5QUxfZWNBYU12RlFzV1RQOEswNlAwVEFkRXMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJwcC5kYmEubmVvNGoiLCJzZWN1cml0eV96b25lIjoiSFJaIiwidGVuYW50X25hbWUiOiJwcC5kYmEiLCJhcHBsaWNhdGlvbl90eXBlIjoib3RoZXIiLCJpc3MiOiJrZXltYWtlcmFwaV9wYXlwYWwiLCJ2ZXJzaW9uIjoiMS4wIiwic29mdF9leHBpcnkiOnRydWUsImF1ZCI6ImtleW1ha2VyYXBpIiwiYXBwbGljYXRpb25fbmFtZSI6InBwLmRiYS5uZW80aiIsInBlcm1pc3Npb25zIjpbImZldGNoX2tleXMiXSwiZXhwIjoxNTk3ODE3NDczODYxLCJpYXQiOjE1OTc3MzEwNzM4NjEsImp0aSI6NTAwMDAwMzA4MH0.W7Brhej-FcssPtqQ2s0p1ItrqSKMAUYI8Q3YtZreq6zJ8cajiwSdgUmmOGh4ihr-grbkGkM0Ac-7K5AnGoPgmTaQRU0FR7NTfcMFCWfPCfGIOgzO4dlzbl_yB6G3d7rSO-3VySZ-fpGUKFKzSOBz1FrLIBIwWICRbeiSV6MA12s" -o keymaker.out
+        cp keymaker.out /ssl/
 readReplica:
   numberOfServers: 2
   persistentVolume:
