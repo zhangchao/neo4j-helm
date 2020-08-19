@@ -5,6 +5,19 @@ core:
   numberOfServers: 3
   persistentVolume:
     storageClass: managed-nfs-storage
+  initContainers:
+  - name: init-plugins
+    image: "appropriate/curl:latest"
+    imagePullPolicy: "IfNotPresent"
+    volumeMounts:
+    - name: plugins
+      mountPath: /plugins
+    command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        curl -L https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.2/apoc-4.1.0.2-all.jar -O
+        cp apoc-4.1.0.2-all.jar /plugins/
 readReplica:
   numberOfServers: 2
   persistentVolume:
