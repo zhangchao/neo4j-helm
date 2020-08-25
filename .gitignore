@@ -45,3 +45,6 @@ expanded.yaml
 package.json
 package-lock.json
 node_modules
+
+deployment-scenarios/chao*.yaml
+chao.sh

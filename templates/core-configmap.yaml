@@ -13,8 +13,28 @@ data:
   NEO4J_dbms_mode: CORE
   {{- end }}
   {{- if .Values.core.ssl }}
-  NEO4J_dbms_ssl_policy_cluster_enabled: true
-  NEO4J_dbms_ssl_policy_cluster_tls__versions: TLSv1.2
-  NEO4J_dbms_ssl_policy_cluster_ciphers: TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
-  NEO4J_dbms_ssl_policy_cluster_client__auth: REQUIRE
+  NEO4J_dbms_ssl_policy_cluster_enabled: "true"
+  NEO4J_dbms_ssl_policy_cluster_tls__versions: "TLSv1.2"
+  NEO4J_dbms_ssl_policy_cluster_ciphers: "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384"
+  NEO4J_dbms_ssl_policy_cluster_client__auth: "REQUIRE"
+  NEO4J_dbms_connector_https_enabled: "true"
+  NEO4J_dbms_ssl_policy_https_enabled: "true"
+  NEO4J_dbms_ssl_policy_https_base__directory: "/ssl/bolt"
+  NEO4J_dbms_ssl_policy_https_private__key: "chao.key"
+  NEO4J_dbms_ssl_policy_https_public__certificate: "chao.crt"
+  NEO4J_dbms_ssl_policy_https_trusted__dir: "/ssl/bolt/trusted"
+  NEO4J_dbms_ssl_policy_https_client__auth: "NONE"
+  NEO4J_dbms_ssl_policy_https_tls__versions: "TLSv1.2"
+  NEO4J_dbms_ssl_policy_https_private__key__password: ""
+  NEO4J_dbms_ssl_policy_bolt_enabled: "true"
+  NEO4J_dbms_ssl_policy_bolt_base__directory: "/ssl/bolt"
+  NEO4J_dbms_ssl_policy_bolt_private__key: "chao.key"
+  NEO4J_dbms_ssl_policy_bolt_public__certificate: "chao.crt"
+  NEO4J_dbms_ssl_policy_bolt_trusted__dir: "/ssl/bolt/trusted"
+  NEO4J_dbms_ssl_policy_bolt_client__auth: "NONE"
+  NEO4J_dbms_ssl_policy_bolt_tls__versions: "TLSv1.2"
+  NEO4J_dbms_ssl_policy_bolt_private__key__password: ""
+  NEO4J_dbms_connector_bolt_tls__level: "REQUIRED"
   {{- end }}
+
+

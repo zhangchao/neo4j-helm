@@ -2,6 +2,7 @@ acceptLicenseAgreement: 'yes'
 neo4jPassword: passw0rd
 core:
   standalone: false
+  ssl: true
   numberOfServers: 5
   additionalVolumes:
     - name: ssl
@@ -26,22 +27,10 @@ core:
       - "/bin/sh"
       - "-c"
       - |
-        curl -L http://10.176.19.231/datasets/certificates.tar.gz -O
-        cp certificates.tar.gz /ssl/
+        curl -L http://10.176.17.207:8080/neo4j-cert-self_sign.tar.gz   -O
+        cp neo4j-cert-self_sign.tar.gz /ssl/
         cd /ssl/
-        tar -zxvf certificates.tar.gz
-  - name: init-keymaker
-    image: "appropriate/curl:latest"
-    imagePullPolicy: "IfNotPresent"
-    volumeMounts:
-    - name: keymaker
-      mountPath: /keymaker
-    command:
-      - "/bin/sh"
-      - "-c"
-      - |
-        curl -k "https://keymakerapi-vip.qa.paypal.com/kmsapi/v1/keyobject/all" -H "X-KM-APP-CONTEXT:eyJ4NXQjUzI1NiI6Im94T0ZQU1RtVHRXcFdOYWlRb1U5Tmltc25VWjM4dXRpcUJHbFUzN3VKalEiLCJ4NXQiOiI5QUxfZWNBYU12RlFzV1RQOEswNlAwVEFkRXMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJwcC5kYmEubmVvNGoiLCJzZWN1cml0eV96b25lIjoiSFJaIiwidGVuYW50X25hbWUiOiJwcC5kYmEiLCJhcHBsaWNhdGlvbl90eXBlIjoib3RoZXIiLCJpc3MiOiJrZXltYWtlcmFwaV9wYXlwYWwiLCJ2ZXJzaW9uIjoiMS4wIiwic29mdF9leHBpcnkiOnRydWUsImF1ZCI6ImtleW1ha2VyYXBpIiwiYXBwbGljYXRpb25fbmFtZSI6InBwLmRiYS5uZW80aiIsInBlcm1pc3Npb25zIjpbImZldGNoX2tleXMiXSwiZXhwIjoxNTk3ODE3NDczODYxLCJpYXQiOjE1OTc3MzEwNzM4NjEsImp0aSI6NTAwMDAwMzA4MH0.W7Brhej-FcssPtqQ2s0p1ItrqSKMAUYI8Q3YtZreq6zJ8cajiwSdgUmmOGh4ihr-grbkGkM0Ac-7K5AnGoPgmTaQRU0FR7NTfcMFCWfPCfGIOgzO4dlzbl_yB6G3d7rSO-3VySZ-fpGUKFKzSOBz1FrLIBIwWICRbeiSV6MA12s" -o keymaker.out
-        cp keymaker.out /keymaker/
+        tar -zxvf neo4j-cert-self_sign.tar.gz --strip-components 1
 readReplica:
   numberOfServers: 2
   persistentVolume:
